@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/model/product_list.dart';
 import 'package:shop/pages/product_datail_page.dart';
 import 'package:shop/pages/products_overview_page.dart';
 import 'package:shop/utils/app_routes.dart';
@@ -14,33 +16,36 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData tema = ThemeData();
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Minha Loja',
-      theme: tema.copyWith(
-        colorScheme: tema.colorScheme.copyWith(
-          primary: Colors.purple,
-          secondary: Colors.amber,
-        ),
-        textTheme: tema.textTheme.copyWith(
-          headline6: TextStyle(
-            fontFamily: 'Anton',
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+    return ChangeNotifierProvider(
+      create: (_) => ProductList(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Minha Loja',
+        theme: tema.copyWith(
+          colorScheme: tema.colorScheme.copyWith(
+            primary: Colors.purple,
+            secondary: Colors.amber,
+          ),
+          textTheme: tema.textTheme.copyWith(
+            headline6: TextStyle(
+              fontFamily: 'Anton',
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          appBarTheme: AppBarTheme(
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Lato',
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        appBarTheme: AppBarTheme(
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Lato',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        home: ProductsOverviewPage(),
+        routes: {AppRoutes.PRODUCT_DATAIL: (ctx) => ProductDetailPage()},
       ),
-      home: ProductsOverviewPage(),
-      routes: {AppRoutes.PRODUCT_DATAIL: (ctx) => ProductDetailPage()},
     );
   }
 }
