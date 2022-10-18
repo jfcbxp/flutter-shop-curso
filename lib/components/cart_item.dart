@@ -38,11 +38,13 @@ class CartItemWidget extends StatelessWidget {
               backgroundColor: Theme.of(context).colorScheme.primary,
               child: Padding(
                 padding: EdgeInsets.all(5),
-                child: FittedBox(child: Text('${cartItem.price}')),
+                child: FittedBox(
+                    child: Text('${cartItem.price.toStringAsFixed(2)}')),
               ),
             ),
             title: Text(cartItem.name),
-            subtitle: Text('Total: R\$ ${cartItem.price * cartItem.quantity}'),
+            subtitle: Text(
+                'Total: R\$ ${(cartItem.price * cartItem.quantity).toStringAsFixed(2)}'),
             trailing: Text('${cartItem.quantity}x'),
           ),
         ),
