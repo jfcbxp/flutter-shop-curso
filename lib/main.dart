@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/model/cart.dart';
 import 'package:shop/model/product_list.dart';
 import 'package:shop/pages/product_datail_page.dart';
 import 'package:shop/pages/products_overview_page.dart';
@@ -16,15 +17,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData tema = ThemeData();
-    return ChangeNotifierProvider(
-      create: (_) => ProductList(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ProductList()),
+        ChangeNotifierProvider(create: (_) => Cart())
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Minha Loja',
         theme: tema.copyWith(
           colorScheme: tema.colorScheme.copyWith(
             primary: Colors.purple,
-            secondary: Colors.amber,
+            secondary: Colors.amber[800],
           ),
           textTheme: tema.textTheme.copyWith(
             headline6: TextStyle(
