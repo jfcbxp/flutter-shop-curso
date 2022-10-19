@@ -14,7 +14,7 @@ class OrderPage extends StatelessWidget {
       appBar: AppBar(title: Text('Meus Pedidos')),
       drawer: AppDrawer(),
       body: ListView.builder(
-          itemCount: orderList.ItemsCount,
+          itemCount: orderList.itemsCount,
           itemBuilder: (ctx, i) => OrderWidget(order: orderList.items[i])),
     );
   }

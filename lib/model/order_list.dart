@@ -11,7 +11,7 @@ class OrderList with ChangeNotifier {
     return [..._items];
   }
 
-  int get ItemsCount {
+  int get itemsCount {
     return _items.length;
   }
 
