@@ -112,7 +112,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       _formData['price'] = double.parse(data ?? '0'),
                   validator: (data) {
                     final _price = double.tryParse(data ?? '') ?? 0;
-                    if (_price > 0.0) {
+                    if (_price <= 0.0) {
                       return 'Preço invalido';
                     }
                   },
@@ -167,9 +167,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       alignment: Alignment.center,
                       child: _imageUrlController.text.isEmpty
                           ? Text('Informe a Url')
-                          : FittedBox(
-                              child: Image.network(_imageUrlController.text),
-                              fit: BoxFit.cover,
+                          : Container(
+                              width: 100,
+                              height: 100,
+                              child: FittedBox(
+                                child: Image.network(_imageUrlController.text),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                     )
                   ],
