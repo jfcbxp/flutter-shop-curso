@@ -4,9 +4,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shop/model/product.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProductList with ChangeNotifier {
-  final _baseUrl = 'https://shop-cod3r-7ead5-default-rtdb.firebaseio.com';
+  final _baseUrl = dotenv.env['BASE_URL'];
   List<Product> _items = [];
   bool _showFavoriteOnly = false;
 

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shop/model/cart.dart';
 import 'package:shop/model/order.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
-
 import 'cart_item.dart';
 
 class OrderList with ChangeNotifier {
-  final _baseUrl = 'https://shop-cod3r-7ead5-default-rtdb.firebaseio.com';
+  final _baseUrl = dotenv.env['BASE_URL'];
   List<Order> _items = [];
 
   List<Order> get items {
