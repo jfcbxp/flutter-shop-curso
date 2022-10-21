@@ -4,6 +4,8 @@ import 'package:shop/model/cart.dart';
 import 'package:shop/model/product.dart';
 import 'package:shop/utils/app_routes.dart';
 
+import '../model/product_list.dart';
+
 class ProductGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,8 @@ class ProductGridItem extends StatelessWidget {
           leading: Consumer<Product>(
             builder: (ctx, product, _) => IconButton(
               onPressed: () {
-                product.toggleFavorite();
+                Provider.of<ProductList>(context, listen: false)
+                    .toggleFavorite(product);
               },
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),

@@ -25,9 +25,4 @@ class Product with ChangeNotifier {
       _$ProductFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
-
-  void toggleFavorite() {
-    isFavorite = !isFavorite;
-    notifyListeners();
-  }
 }
