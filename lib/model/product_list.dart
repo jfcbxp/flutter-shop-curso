@@ -49,14 +49,9 @@ class ProductList with ChangeNotifier {
     if (response.body == 'null') return;
     print(response);
     Map<String, dynamic> data = jsonDecode(response.body);
+
     data.forEach((productId, productData) {
-      _items.add(Product(
-          id: productId,
-          title: productData['title'] as String,
-          description: productData['description'] as String,
-          price: productData['price'] as double,
-          imageUrl: productData['imageUrl'] as String,
-          isFavorite: productData['isFavorite'] as bool));
+      _items.add(Product.fromJson(productData));
     });
     notifyListeners();
   }
