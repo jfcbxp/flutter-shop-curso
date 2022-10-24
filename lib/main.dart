@@ -1,5 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/firebase_options.dart';
+import 'package:shop/model/auth.dart';
 import 'package:shop/model/cart.dart';
 import 'package:shop/model/order_list.dart';
 import 'package:shop/model/product_list.dart';
@@ -15,6 +18,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -29,7 +33,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ProductList()),
         ChangeNotifierProvider(create: (_) => Cart()),
-        ChangeNotifierProvider(create: (_) => OrderList())
+        ChangeNotifierProvider(create: (_) => OrderList()),
+        ChangeNotifierProvider(create: (_) => Auth()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,6 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/model/auth.dart';
 
-enum AuthMode { SINGUP, LOGIN }
+import '../exception/AuthException.dart';
+
+enum AuthMode { SIGNUP, LOGIN }
 
 class AuthForm extends StatefulWidget {
   const AuthForm({super.key});
@@ -17,7 +22,7 @@ class _AuthFormState extends State<AuthForm> {
   AuthMode _authMode = AuthMode.LOGIN;
   Map<String, String> _authData = {'email': '', 'password': ''};
 
-  void _submit() {
+  Future<void> _submit() async {
     final isValid = _formKey.currentState?.validate() ?? false;
 
     if (!isValid) {
@@ -30,24 +35,49 @@ class _AuthFormState extends State<AuthForm> {
 
     _formKey.currentState?.save();
 
-    if (_isLoading) {
-    } else {}
+    Auth auth = Provider.of(context, listen: false);
+
+    try {
+      if (_isLogin()) {
+        await auth.login(
+            _authData['email'].toString(), _authData['password'].toString());
+      } else {
+        await auth.signup(
+            _authData['email'].toString(), _authData['password'].toString());
+      }
+    } on AuthException catch (e) {
+      _showErrorDialog(e.message);
+    }
 
     setState(() {
       _isLoading = false;
     });
   }
 
+  _showErrorDialog(String msg) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: Text('Ocorreu um erro'),
+              content: Text(msg),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text('Fechar'))
+              ],
+            ));
+  }
+
   bool _isLogin() => _authMode == AuthMode.LOGIN;
 
-  bool _isSingup() => _authMode == AuthMode.SINGUP;
+  bool _isSignup() => _authMode == AuthMode.SIGNUP;
 
   void _switchAuthMode() {
     setState(() {
       if (_isLogin()) {
-        _authMode == AuthMode.SINGUP;
+        _authMode = AuthMode.SIGNUP;
       } else {
-        _authMode == AuthMode.LOGIN;
+        _authMode = AuthMode.LOGIN;
       }
     });
   }
@@ -87,7 +117,7 @@ class _AuthFormState extends State<AuthForm> {
                       return 'Informe uma senha valida';
                     }
                   }),
-              if (_isSingup())
+              if (_isSignup())
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Confirmar Senha'),
                   obscureText: true,
