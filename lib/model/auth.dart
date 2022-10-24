@@ -3,10 +3,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shop/exception/AuthException.dart';
 
 class Auth with ChangeNotifier {
+  UserCredential? credential;
+  DateTime? expiration;
+  String? token;
+
+  bool get isAuth {
+    if (credential != null && expiration != null) {
+      if (DateTime.now().compareTo(expiration!) == -1) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
   Future<void> signup(String email, String senha) async {
     try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: senha,
       );
@@ -23,8 +38,15 @@ class Auth with ChangeNotifier {
 
   Future<void> login(String email, String senha) async {
     try {
-      final credential = await FirebaseAuth.instance
+      credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: senha);
+
+      await credential!.user?.getIdTokenResult(false).then((value) {
+        expiration = value.expirationTime ?? DateTime.now();
+        token = value.token;
+      });
+
+      notifyListeners();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw AuthException(message: 'Usuario não encontrado.');

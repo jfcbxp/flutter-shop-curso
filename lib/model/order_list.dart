@@ -9,6 +9,9 @@ import 'cart_item.dart';
 class OrderList with ChangeNotifier {
   final _baseUrl = dotenv.env['BASE_URL'];
   List<Order> _items = [];
+  String? token;
+
+  OrderList(this.token, this._items);
 
   List<Order> get items {
     return [..._items];
@@ -22,7 +25,7 @@ class OrderList with ChangeNotifier {
     _items.clear();
 
     final response = await http.get(
-      Uri.parse('$_baseUrl/order.json'),
+      Uri.parse('$_baseUrl/order.json?auth=${token}'),
     );
     if (response.body == 'null') return;
     Map<String, dynamic> data = jsonDecode(response.body);
@@ -45,7 +48,7 @@ class OrderList with ChangeNotifier {
     final date = DateTime.now();
 
     final response = await http.post(
-      Uri.parse('$_baseUrl/order.json'),
+      Uri.parse('$_baseUrl/order.json?auth=${token}'),
       body: jsonEncode(
         {
           'total': cart.totalAmount,

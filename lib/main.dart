@@ -6,13 +6,12 @@ import 'package:shop/model/auth.dart';
 import 'package:shop/model/cart.dart';
 import 'package:shop/model/order_list.dart';
 import 'package:shop/model/product_list.dart';
-import 'package:shop/pages/auth_page.dart';
+import 'package:shop/pages/auth_or_home_page.dart';
 import 'package:shop/pages/cart_page.dart';
 import 'package:shop/pages/orders_page.dart';
 import 'package:shop/pages/product_datail_page.dart';
 import 'package:shop/pages/product_form_page.dart';
 import 'package:shop/pages/product_page.dart';
-import 'package:shop/pages/products_overview_page.dart';
 import 'package:shop/utils/app_routes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -31,10 +30,19 @@ class MyApp extends StatelessWidget {
     final ThemeData tema = ThemeData();
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ProductList()),
-        ChangeNotifierProvider(create: (_) => Cart()),
-        ChangeNotifierProvider(create: (_) => OrderList()),
         ChangeNotifierProvider(create: (_) => Auth()),
+        ChangeNotifierProxyProvider<Auth, ProductList>(
+            create: (_) => ProductList(null, []),
+            update: (context, auth, previous) {
+              return ProductList(auth.token, previous?.items ?? []);
+            }),
+        ChangeNotifierProxyProvider<Auth, OrderList>(
+          create: (_) => OrderList('', []),
+          update: (context, auth, previous) {
+            return OrderList(auth.token, previous?.items ?? []);
+          },
+        ),
+        ChangeNotifierProvider(create: (_) => Cart()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -64,11 +72,10 @@ class MyApp extends StatelessWidget {
         routes: {
           AppRoutes.PRODUCT_DATAIL: (ctx) => ProductDetailPage(),
           AppRoutes.CART: (ctx) => CartPage(),
-          AppRoutes.HOME: (ctx) => ProductsOverviewPage(),
           AppRoutes.ORDER: (ctx) => OrderPage(),
           AppRoutes.PRODUCT: (ctx) => ProductPage(),
           AppRoutes.PRODUCT_FORM: (ctx) => ProductFormPage(),
-          AppRoutes.AUTH: (ctx) => AuthPage(),
+          AppRoutes.AUTH_OR_HOME: (ctx) => AuthOrHomePage(),
         },
       ),
     );
