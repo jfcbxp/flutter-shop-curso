@@ -62,7 +62,7 @@ class _AuthFormState extends State<AuthForm> {
               content: Text(msg),
               actions: [
                 TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => Navigator.of(ctx).pop(),
                     child: Text('Fechar'))
               ],
             ));
