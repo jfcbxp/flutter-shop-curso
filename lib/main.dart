@@ -14,6 +14,7 @@ import 'package:shop/pages/product_form_page.dart';
 import 'package:shop/pages/product_page.dart';
 import 'package:shop/utils/app_routes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shop/utils/custom_route.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
@@ -48,6 +49,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Minha Loja',
         theme: tema.copyWith(
+          pageTransitionsTheme: PageTransitionsTheme(builders: {
+            TargetPlatform.android: CustomPageTransitionsBuilder()
+          }),
           colorScheme: tema.colorScheme.copyWith(
             primary: Colors.purple,
             secondary: Colors.amber[800],
